@@ -16,8 +16,9 @@ public class Plugin extends JavaPlugin {
 
 	private final String COMMANDPART1 = "minecraft:give ";
 	private final String COMMANDPART2 = " minecraft:phantom_membrane{display:{Name:'{\"text\":\"Слендерит\"}',Lore:['{\"text\":\"Игровая валюта\",\"color\":\"#1111\u200B\"}']}}";
+
 	private final String PERMISSIONEXCEPTION = "Not perm";
-	private final String LIMITEXCEPTION = "Max count 2304";
+	private final int limit = 2304;
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
@@ -40,9 +41,8 @@ public class Plugin extends JavaPlugin {
 		}
 		try {
 			count = Integer.parseInt(args[1]);
-			if (count > 2304) {
-				sender.sendMessage(LIMITEXCEPTION);
-				return false;
+			if (count > limit) {
+				count = limit;
 			}
 		} catch (NumberFormatException e) {
 			return false;
