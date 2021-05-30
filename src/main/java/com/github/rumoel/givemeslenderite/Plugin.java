@@ -15,46 +15,51 @@ public class Plugin extends JavaPlugin {
 		this.getCommand("slenderite").setExecutor(this);
 	}
 
+	private final String COMMANDPART1 = "minecraft:give ";
+	private final String COMMANDPART2 = " minecraft:phantom_membrane{display:{Name:'{\"text\":\"Слендерит\"}',Lore:['{\"text\":\"Игровая валюта\",\"color\":\"#1111\u200B\"}']}}";
+	private final String PERMISSIONEXCEPTION = "Not perm";
+
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label,
 			@NotNull String[] args) {
 
-		if (args.length == 2) {
-			String nameText = args[0];
-			Player target = null;
-			int count;
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				if (player.getName().equals(nameText)) {
-					target = player;
-				}
-			}
-			if (target == null) {
-				return false;
-			}
-			try {
-				count = Integer.parseInt(args[1]);
-			} catch (NumberFormatException e) {
-				return false;
-			}
+		if (args.length != 2) {
+			return false;
+		}
 
-			StringBuilder cmd = new StringBuilder();
-			cmd.append("minecraft:give ").append(target.getName()).append(
-					" minecraft:phantom_membrane{display:{Name:'{\"text\":\"Слендерит\"}',Lore:['{\"text\":\"Игровая валюта\",\"color\":\"#1111\u200B\"}']}}");
+		String nameText = args[0];
+		Player target = null;
+		int count;
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (player.getName().equals(nameText)) {
+				target = player;
+			}
+		}
+		if (target == null) {
+			return false;
+		}
+		try {
+			count = Integer.parseInt(args[1]);
+		} catch (NumberFormatException e) {
+			return false;
+		}
 
-			cmd.append(" ").append(count);
-			if (command.getName().equalsIgnoreCase("slenderite")) {
-				if (sender instanceof ConsoleCommandSender) {
-					Bukkit.dispatchCommand(sender, cmd.toString());
+		StringBuilder cmd = new StringBuilder();
+		cmd.append(COMMANDPART1).append(target.getName()).append(COMMANDPART2);
+
+		cmd.append(" ").append(count);
+		if (command.getName().equalsIgnoreCase("slenderite")) {
+			if (sender instanceof ConsoleCommandSender) {
+				Bukkit.dispatchCommand(sender, cmd.toString());
+				return true;
+			} else if (sender instanceof Player) {
+				Player player = (Player) sender;
+				if (player.hasPermission("givemeslenderite.slenderite")) {
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.toString());
 					return true;
-				} else if (sender instanceof Player) {
-					Player player = (Player) sender;
-					if (player.hasPermission("givemeslenderite.slenderite")) {
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.toString());
-						return true;
-					} else {
-						sender.sendMessage("not perm");
-						return false;
-					}
+				} else {
+					sender.sendMessage(PERMISSIONEXCEPTION);
+					return false;
 				}
 			}
 		}
