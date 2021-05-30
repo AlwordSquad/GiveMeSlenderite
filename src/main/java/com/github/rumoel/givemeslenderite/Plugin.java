@@ -3,7 +3,6 @@ package com.github.rumoel.givemeslenderite;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -49,10 +48,7 @@ public class Plugin extends JavaPlugin {
 
 		cmd.append(" ").append(count);
 		if (command.getName().equalsIgnoreCase("slenderite")) {
-			if (sender instanceof ConsoleCommandSender) {
-				Bukkit.dispatchCommand(sender, cmd.toString());
-				return true;
-			} else if (sender instanceof Player) {
+			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				if (player.hasPermission("givemeslenderite.slenderite")) {
 					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.toString());
@@ -62,6 +58,8 @@ public class Plugin extends JavaPlugin {
 					return false;
 				}
 			}
+			Bukkit.dispatchCommand(sender, cmd.toString());
+			return true;
 		}
 		return false;
 	}
