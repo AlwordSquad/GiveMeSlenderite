@@ -1,0 +1,13 @@
+main: com.github.rumoel.givemeslenderite.Plugin
+name: givemeslenderite
+version: '1.0'
+description: Give slenderite
+author: RumoEl
+website: github.com
+commands:
+  slenderite:
+    description: gives slander to the player
+    permission : givemeslenderite.slenderite
+    usage : /<command> [player] [count]
+    default: op
+    
